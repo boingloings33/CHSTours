@@ -1,28 +1,51 @@
+const crypto = require('crypto');
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
+const sendEmail = require('../utils/email');
 
-exports.signup = catchAsync(async (req, res) => {
-  const newUser = await User.create(req.body);
+const signToken = function (id) {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
 
-  res.status(201).json({
+const createAndSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  res.cookie('jwt', token, cookieOptions);
+
+  user.password = undefined;
+
+  res.status(statusCode).json({
     status: 'success',
+    token,
     data: {
-      user: newUser,
+      user,
     },
   });
 };
 
-exports.signup = catchAsync(async (req, res) => {
+exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     role: req.body.role,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
   });
 
-  createAndSendToken(newUser, 201, req);
+  createAndSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -156,19 +179,19 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 3) Update changePasswordAt for user
 
   // 4) Log user in, send JWT
-  createAndSendToken(user, 400, res);
+  createAndSendToken(user, 200, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
   // 2) Check if POSTed current password is correct
-  if (!(await user.correctPassword(req.body.passwordConfirm, user.password))) {
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     next(new AppError('Please enter correct password'), 401);
   }
   // 3) If so update pass
   user.password = req.body.password;
-  user.password = req.body.passwordConfirm;
+  user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
   // 4) Log user in, send JWT
   createAndSendToken(user, 200, res);
