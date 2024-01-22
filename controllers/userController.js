@@ -54,6 +54,12 @@ exports.createUser = function (req, res) {
 exports.deleteUser = function (req, res) {
   factory.deleteOne(User);
 };
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+
+  next();
+};
+
 exports.getUser = factory.getOne(User);
 exports.getAllUsers = factory.getAll(User);
 exports.updateUser = factory.updateOne(User);
