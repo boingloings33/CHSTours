@@ -1,17 +1,23 @@
 doctype html
 html
   head
-    title Natours | #{tour}
-    link(rel='stylesheet' href='css/style.css')
-    link(rel='shortcut icon' type='image/png' href='img/favicon.png')
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Natours | #{title}
+    link(rel='stylesheet', href='css/style.css')
+    link(rel='shortcut icon', type='image/png', href='img/favicon.png')
+    link(
+      href='https://fonts.googleapis.com/css?family=Lato:300,300i,700',
+      rel='stylesheet'
+    )
 
   body
-    h1= tour
-    h2= user.toUpperCase()
+    //Header
+    include _header
 
-    - const x = 9
-    h2= 2 * x
-    p Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta earum facilis ipsam vitae porro molestias quisquam quia quasi incidunt vel, magnam est temporibus dolores blanditiis illum exercitationem, officiis libero explicabo!
+    //Content
+    block content
+      h1 This is a placeholder pofspdf
 
-
-
+    //Footer
+    include _footer
