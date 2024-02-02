@@ -30,3 +30,9 @@ exports.getTour = catchAsync(async (req, res, next) => {
       tour,
     });
 });
+
+exports.getLogIn = catchAsync(async (req, res, next) => {
+  res.status(200).render('login', {
+    title: 'Log In',
+  });
+});

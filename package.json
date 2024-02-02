@@ -1,13 +1,23 @@
 {
+  "main": "app.js",
+  "targets": {
+    "main": false
+  },
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js",
     "debug": "ndb server.js",
-    "prettierpug": "npx prettier --write **/*.pug --plugin=@prettier/plugin-pug"
+    "prettierpug": "npx prettier --write **/*.pug --plugin=@prettier/plugin-pug",
+    "watch": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
+    "build": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js"
   },
   "dependencies": {
+    "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "esbuild": "0.20.0",
     "express": "^4.18.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.5",
@@ -26,6 +36,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-pug": "^3.0.0",
+    "buffer": "^6.0.3",
     "eslint": "^8.53.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
