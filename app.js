@@ -25,52 +25,49 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Set security HTTP headers
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false,
-  }),
-);
-
-// Further HELMET configuration for Security Policy (CSP)
-const scriptSrcUrls = [
-  'https://api.tiles.mapbox.com/',
-  'https://api.mapbox.com/',
-  'https://*.cloudflare.com',
-  'https://js.stripe.com/v3/',
-  'https://checkout.stripe.com',
-];
-const styleSrcUrls = [
-  'https://api.mapbox.com/',
-  'https://api.tiles.mapbox.com/',
-  'https://fonts.googleapis.com/',
-  'https://www.myfonts.com/fonts/radomir-tinkov/gilroy/*',
-  ' checkout.stripe.com',
-];
-const connectSrcUrls = [
-  'https://*.mapbox.com/',
-  'https://*.cloudflare.com',
-  'http://127.0.0.1:8000',
-  'http://127.0.0.1:52191',
-  '*.stripe.com',
-];
-const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
-
-app.use(
-  cors({
-    origin: '*',
-  }),
-);
-
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: ["'self'", ...connectSrcUrls],
-      scriptSrc: ["'self'", ...scriptSrcUrls],
-      workerSrc: ["'self'", 'blob:'],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      objectSrc: [],
-      imgSrc: ["'self'", 'blob:', 'data:'],
-      fontSrc: ["'self'", ...fontSrcUrls],
-      frameSrc: ['*.stripe.com', '*.stripe.network'],
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", 'https:', 'data:'],
+        scriptSrc: [
+          "'self'",
+          'https:',
+          'http:',
+          'blob:',
+          'https://*.mapbox.com',
+          'https://js.stripe.com',
+          'https://m.stripe.network',
+          'https://*.cloudflare.com',
+        ],
+        frameSrc: ["'self'", 'https://js.stripe.com'],
+        objectSrc: ["'none'"],
+        styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+        workerSrc: [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://*.tiles.mapbox.com',
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          'https://m.stripe.network',
+        ],
+        childSrc: ["'self'", 'blob:'],
+        imgSrc: ["'self'", 'data:', 'blob:'],
+        formAction: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'data:',
+          'blob:',
+          'https://*.stripe.com',
+          'https://*.mapbox.com',
+          'https://*.cloudflare.com/',
+          'https://bundle.js:*',
+          'ws://127.0.0.1:*/',
+        ],
+        upgradeInsecureRequests: [],
+      },
     },
   }),
 );

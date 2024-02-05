@@ -25,7 +25,8 @@
         anchor: "bottom"
       }).setLngLat(loc.coordinates).addTo(map);
       new mapboxgl.Popup({
-        offset: 30
+        offset: 30,
+        focusAfterOpen: false
       }).setLngLat(loc.coordinates).setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`).addTo(map);
       bounds.extend(loc.coordinates);
     });
@@ -2210,10 +2211,45 @@
       showAlert("error", err.response.data.message);
     }
   };
+  var logout = async () => {
+    try {
+      const res = await axios_default({
+        method: "GET",
+        url: "http://127.0.0.1:8000/api/v1/users/logout"
+      });
+      if (res.data.status === "success") {
+        location.assign("/");
+      }
+    } catch (err) {
+      showAlert("error", "Error logging out, try again!");
+    }
+  };
+
+  // public/js/updateSettings.js
+  var updateSettings = async (data, type) => {
+    try {
+      const res = await axios_default({
+        method: "PATCH",
+        url: type === "data" ? "http://127.0.0.1:8000/api/v1/users/updateMe" : "http://127.0.0.1:8000/api/v1/users/updateMyPassword",
+        data
+      });
+      if (res.data.status === "success") {
+        showAlert(
+          "success",
+          type === "data" ? "Settings succesfully changed!" : "Password succesfully changed!"
+        );
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
 
   // public/js/index.js
   var mapBox = document.getElementById("map");
-  var loginForm = document.querySelector(".form");
+  var loginForm = document.querySelector(".login-form");
+  var logOutBtn = document.querySelector(".nav__el--logout");
+  var userDataForm = document.querySelector(".form-user-data");
+  var userPasswordForm = document.querySelector(".form-user-settings");
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
@@ -2224,6 +2260,37 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       login(email, password);
+    });
+  }
+  if (logOutBtn) {
+    logOutBtn.addEventListener("click", logout);
+  }
+  if (userDataForm) {
+    userDataForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const userData = { name, email };
+      updateSettings(userData, "data");
+    });
+  }
+  if (userPasswordForm) {
+    userPasswordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const passwordCurrent = document.getElementById("password-current").value;
+      const password = document.getElementById("password").value;
+      const passwordConfirm = document.getElementById("password-confirm").value;
+      document.querySelector(".btn--save-password").textContent = "Updating...";
+      const userPasswordData = {
+        passwordCurrent,
+        password,
+        passwordConfirm
+      };
+      await updateSettings(userPasswordData, "password");
+      document.getElementById("password-current").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("password-confirm").value = "";
+      document.querySelector(".btn--save-password").textContent = "Save password";
     });
   }
 })();

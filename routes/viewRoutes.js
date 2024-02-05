@@ -5,13 +5,14 @@ const {
   getOverview,
   getTour,
   getLogIn,
+  getAccount,
 } = require('../controllers/viewsController');
-const { isLoggedIn } = require('../controllers/authController');
 
-router.use(isLoggedIn);
+const { isLoggedIn, protect } = require('../controllers/authController');
 
-router.get('/', getOverview);
-router.get('/tour/:slug', getTour);
-router.get('/login', getLogIn);
+router.get('/', isLoggedIn, getOverview);
+router.get('/tour/:slug', isLoggedIn, getTour);
+router.get('/login', isLoggedIn, getLogIn);
+router.get('/me', protect, getAccount);
 
 module.exports = router;
