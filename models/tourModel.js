@@ -98,6 +98,15 @@ const tourSchema = new mongoose.Schema(
     ],
     website: String,
     guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+    season: {
+      type: String,
+      required: [true, 'A tour must have a season'],
+      enum: {
+        values: ['spring', 'summer', 'fall', 'winter', 'all year'],
+        message: 'Season must be: spring, summer, fall, winter, all year',
+      },
+      default: 'all year',
+    },
   },
 
   {
