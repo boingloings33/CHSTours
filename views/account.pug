@@ -11,10 +11,10 @@ block content
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('#', 'Settings', 'settings', true)
-          +navItem('#', 'My Bookings', 'briefcase')
-          +navItem('#', 'My Reviews', 'star')
-          +navItem('#', 'Billing', 'credit-card')
+          +navItem('', 'Settings', 'settings', true)
+          //- +navItem('#', 'My Bookings', 'briefcase')
+          //- +navItem('#', 'My Reviews', 'star')
+          //- +navItem('#', 'Billing', 'credit-card')
         - if(user.role==='admin')
           .admin-nav
             h5.admin-nav__heading Admin
@@ -43,7 +43,9 @@ block content
               )
             .form__group.form__photo-upload
               img.form__user-photo(src=`img/users/${user.photo}`, alt='User photo')
-              a.btn-text(href='') Choose new photo
+              input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+              label(for='photo') Choose new photo
+
             .form__group.right
               button.btn.btn--small.btn--green Save settings
         .line &nbsp;
@@ -57,7 +59,7 @@ block content
                 placeholder='••••••••',
                 required,
                 minlength='8'
-                autocomplete="off"
+                autocomplete="new-password"
               )
             .form__group
               label.form__label(for='password') New password
@@ -66,6 +68,8 @@ block content
                 placeholder='••••••••',
                 required,
                 minlength='8'
+                autocomplete="new-password"
+
               )
             .form__group.ma-bt-lg
               label.form__label(for='password-confirm') Confirm password
@@ -74,6 +78,8 @@ block content
                 placeholder='••••••••',
                 required,
                 minlength='8'
+                autocomplete="new-password"
+
               )
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-password Save password

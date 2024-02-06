@@ -11,12 +11,11 @@
     var map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/jonasschmedtmann/cjvi9q8jd04mi1cpgmg7ev3dy",
-      scrollZoom: false
-      // center: [-118.113491, 34.111745],
-      // zoom: 10,
+      scrollZoom: false,
+      center: locations[0].coordinates,
+      zoom: 13
       // interactive: false
     });
-    const bounds = new mapboxgl.LngLatBounds();
     locations.forEach((loc) => {
       const el = document.createElement("div");
       el.className = "marker";
@@ -24,19 +23,6 @@
         element: el,
         anchor: "bottom"
       }).setLngLat(loc.coordinates).addTo(map);
-      new mapboxgl.Popup({
-        offset: 30,
-        focusAfterOpen: false
-      }).setLngLat(loc.coordinates).setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`).addTo(map);
-      bounds.extend(loc.coordinates);
-    });
-    map.fitBounds(bounds, {
-      padding: {
-        top: 200,
-        bottom: 150,
-        left: 100,
-        right: 100
-      }
     });
   };
 
@@ -2225,6 +2211,30 @@
     }
   };
 
+  // public/js/signup.js
+  var signup = async (email, password, passwordConfirm, name) => {
+    try {
+      const res = await axios_default({
+        method: "POST",
+        url: "http://127.0.0.1:8000/api/v1/users/signup",
+        data: {
+          email,
+          password,
+          passwordConfirm,
+          name
+        }
+      });
+      if (res.data.status === "success") {
+        showAlert("success", "Logged in successfully!");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 1500);
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
+
   // public/js/updateSettings.js
   var updateSettings = async (data, type) => {
     try {
@@ -2238,6 +2248,9 @@
           "success",
           type === "data" ? "Settings succesfully changed!" : "Password succesfully changed!"
         );
+        window.setTimeout(() => {
+          location.assign("/me");
+        }, 1e3);
       }
     } catch (err) {
       showAlert("error", err.response.data.message);
@@ -2247,12 +2260,39 @@
   // public/js/index.js
   var mapBox = document.getElementById("map");
   var loginForm = document.querySelector(".login-form");
+  var signupForm = document.querySelector(".signup-form");
   var logOutBtn = document.querySelector(".nav__el--logout");
   var userDataForm = document.querySelector(".form-user-data");
   var userPasswordForm = document.querySelector(".form-user-settings");
+  var filetag = document.querySelector("#photo");
+  var preview = document.querySelector(".form__user-photo");
+  var readURL = (input) => {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.setAttribute("src", e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
+  if (filetag && preview) {
+    filetag.addEventListener("change", function() {
+      readURL(this);
+    });
+  }
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
+  }
+  if (signupForm) {
+    signupForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const passwordConfirm = document.getElementById("password-confirm").value;
+      const name = document.getElementById("name").value;
+      signup(email, password, passwordConfirm, name);
+    });
   }
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
@@ -2268,10 +2308,11 @@
   if (userDataForm) {
     userDataForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const userData = { name, email };
-      updateSettings(userData, "data");
+      const form = new FormData();
+      form.append("name", document.getElementById("name").value);
+      form.append("email", document.getElementById("email").value);
+      form.append("photo", document.getElementById("photo").files[0]);
+      updateSettings(form, "data");
     });
   }
   if (userPasswordForm) {

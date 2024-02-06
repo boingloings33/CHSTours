@@ -11,6 +11,7 @@ block content
             type='email',
             placeholder='you@example.com',
             required
+            autocomplete="off"
           )
         .form__group.ma-bt-md
           label.form__label(for='password') Password
@@ -19,6 +20,7 @@ block content
             placeholder='••••••••',
             required,
             minlength='8'
+            autocomplete="new-password"
           )
         .form__group
           button.btn.btn--green Login

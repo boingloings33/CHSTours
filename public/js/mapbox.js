@@ -7,12 +7,12 @@ export const displayMap = (locations) => {
     container: 'map',
     style: 'mapbox://styles/jonasschmedtmann/cjvi9q8jd04mi1cpgmg7ev3dy',
     scrollZoom: false,
-    // center: [-118.113491, 34.111745],
-    // zoom: 10,
+    center: locations[0].coordinates,
+    zoom: 13,
     // interactive: false
   });
 
-  const bounds = new mapboxgl.LngLatBounds();
+  // const bounds = new mapboxgl.LngLatBounds();
 
   locations.forEach((loc) => {
     // Create marker
@@ -28,24 +28,24 @@ export const displayMap = (locations) => {
       .addTo(map);
 
     // Add popup
-    new mapboxgl.Popup({
-      offset: 30,
-      focusAfterOpen: false,
-    })
-      .setLngLat(loc.coordinates)
-      .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
-      .addTo(map);
+    // new mapboxgl.Popup({
+    //   offset: 30,
+    //   focusAfterOpen: false,
+    // })
+    //   .setLngLat(loc.coordinates)
+    //   .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
+    //   .addTo(map);
 
-    // Extend map bounds to include current location
-    bounds.extend(loc.coordinates);
+    // // Extend map bounds to include current location
+    // bounds.extend(loc.coordinates);
   });
 
-  map.fitBounds(bounds, {
-    padding: {
-      top: 200,
-      bottom: 150,
-      left: 100,
-      right: 100,
-    },
-  });
+  // map.fitBounds(bounds, {
+  //   padding: {
+  //     top: 300,
+  //     bottom: 250,
+  //     left: 100,
+  //     right: 100,
+  //   },
+  // });
 };

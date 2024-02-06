@@ -47,3 +47,9 @@ exports.getAccount = catchAsync(async (req, res, next) => {
     title: 'Your Account',
   });
 });
+
+exports.getSignUp = catchAsync(async (req, res, next) => {
+  res.status(200).render('signup', {
+    title: 'Sign Up',
+  });
+});
