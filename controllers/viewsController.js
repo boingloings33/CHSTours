@@ -53,3 +53,18 @@ exports.getSignUp = catchAsync(async (req, res, next) => {
     title: 'Sign Up',
   });
 });
+
+exports.getResetPassword = catchAsync(async (req, res, next) => {
+  const resetToken = req.params.resetToken;
+
+  res.status(200).render('passwordResetPage', {
+    title: 'Reset Password',
+    resetToken,
+  });
+});
+
+exports.getForgotPassword = catchAsync(async (req, res, next) => {
+  res.status(200).render('forgotPassword', {
+    title: 'Forgot Password',
+  });
+});

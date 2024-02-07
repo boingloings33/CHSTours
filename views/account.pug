@@ -4,7 +4,7 @@ mixin navItem(link, text, icon, active)
     a(href=`${link}`)
       svg
         use(xlink:href=`img/icons.svg#icon-${icon}`)
-      | #{text}
+      | #{ text }
 
 block content
   main.main
@@ -42,8 +42,15 @@ block content
                 required
               )
             .form__group.form__photo-upload
-              img.form__user-photo(src=`img/users/${user.photo}`, alt='User photo')
-              input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+              img.form__user-photo(
+                src=`img/users/${user.photo}`,
+                alt='User photo'
+              )
+              input#photo.form__upload(
+                type='file',
+                accept='image/*',
+                name='photo'
+              )
               label(for='photo') Choose new photo
 
             .form__group.right
@@ -58,8 +65,8 @@ block content
                 type='password',
                 placeholder='••••••••',
                 required,
-                minlength='8'
-                autocomplete="new-password"
+                minlength='8',
+                autocomplete='new-password'
               )
             .form__group
               label.form__label(for='password') New password
@@ -67,9 +74,8 @@ block content
                 type='password',
                 placeholder='••••••••',
                 required,
-                minlength='8'
-                autocomplete="new-password"
-
+                minlength='8',
+                autocomplete='new-password'
               )
             .form__group.ma-bt-lg
               label.form__label(for='password-confirm') Confirm password
@@ -77,9 +83,8 @@ block content
                 type='password',
                 placeholder='••••••••',
                 required,
-                minlength='8'
-                autocomplete="new-password"
-
+                minlength='8',
+                autocomplete='new-password'
               )
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-password Save password

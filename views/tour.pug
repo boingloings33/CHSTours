@@ -1,8 +1,10 @@
 extends base
 block append head
   script(src='https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js')
-  link(href='https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css' rel='stylesheet')
-
+  link(
+    href='https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css',
+    rel='stylesheet'
+  )
 
 mixin reviewCard(review)
   .reviews__card
@@ -67,7 +69,6 @@ block content
 
         //- .overview-box__group
         //-   h2.heading-secondary.ma-bt-lg Your tour guides
-
           //- each guide in tour.guides
           //-   .overview-box__detail
           //-     img.overview-box__img(
@@ -121,4 +122,4 @@ block content
       .cta__content
         h2.heading-secondary What are you waiting for?
         p.cta__text Make new memories today!
-        a.btn.btn--green.span-all-rows(href= `${tour.website}`) Book tour now!
+        a.btn.btn--green.span-all-rows(href=`${tour.website}`) Book tour now!
