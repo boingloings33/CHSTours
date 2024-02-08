@@ -1,5 +1,5 @@
 const multer = require('multer');
-const sharp = require('sharp');
+const Jimp = require('jimp');
 const Tour = require('../models/tourModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -33,11 +33,10 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
   // 1) Cover image
   req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
+  await Jimp.read(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/tours/${req.body.imageCover}`);
+    .quality(90)
+    .write(`public/img/tours/${filename}.jpg`);
 
   // 2) Images
   req.body.images = [];
@@ -46,11 +45,10 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
     req.files.images.map(async (file, i) => {
       const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
-      await sharp(file.buffer)
+      await Jimp.read(file.buffer)
         .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/tours/${filename}`);
+        .quality(90)
+        .write(`public/img/tours/${filename}.jpg`);
 
       req.body.images.push(filename);
     }),

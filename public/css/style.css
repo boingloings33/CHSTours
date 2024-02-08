@@ -433,7 +433,7 @@ body {
 
 .section-description {
   background-color: #fcfcfc;
-  margin-top: calc(0px - var(--section-rotate));
+  margin-top: calc(-88px - var(--section-rotate));
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -465,6 +465,8 @@ body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  align-items: center;
+  margin-top: 86px;
 }
 .overview-box__group:not(:last-child) {
   margin-bottom: 7rem;
@@ -612,6 +614,7 @@ body {
   overflow-x: scroll;
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
+  overflow: hidden;
 }
 .reviews__card {
   width: 30rem;
