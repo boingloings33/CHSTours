@@ -12,25 +12,18 @@ const signToken = function (id) {
   });
 };
 
-const createAndSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-  const cookieOptions = {
+
+  res.cookie('jwt', token, {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ),
     httpOnly: true,
-  };
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+  });
 
-  if (process.env.NODE_ENV === 'production') {
-    app.use((req, res, next) => {
-      if (req.header('x-forwarded-proto') !== 'https')
-        res.redirect(`https://${req.header('host')}${req.url}`);
-      else next();
-    });
-  }
-
-  res.cookie('jwt', token, cookieOptions);
-
+  // Remove password from output
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -41,7 +34,6 @@ const createAndSendToken = (user, statusCode, res) => {
     },
   });
 };
-
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
