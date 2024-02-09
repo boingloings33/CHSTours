@@ -17,23 +17,10 @@ const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const app = express();
 
-app.enable('trust proxy');
-
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //GLOBAL MIDDLEWARE
-app.use(
-  session({
-    secret: process.env.JWT_SECRET,
-    resave: true,
-    saveUninitialized: false,
-    cookie: {
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-      secure: process.env.NODE_ENV === 'production', // must be true if sameSite='none'
-    },
-  }),
-);
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set security HTTP headers

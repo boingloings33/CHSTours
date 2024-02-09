@@ -12,16 +12,17 @@ const signToken = function (id) {
   });
 };
 
-const createSendToken = (user, statusCode, req, res) => {
+const createAndSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-
-  res.cookie('jwt', token, {
+  const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ),
     httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-  });
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  res.cookie('jwt', token, cookieOptions);
 
   // Remove password from output
   user.password = undefined;
@@ -34,6 +35,7 @@ const createSendToken = (user, statusCode, req, res) => {
     },
   });
 };
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
