@@ -1383,6 +1383,7 @@ body {
   .header__logo img {
     height: 2rem;
   }
+
   .card-container {
     display: flex;
     flex-direction: column;
@@ -1397,11 +1398,12 @@ body {
     flex-direction: row;
   }
   .nav--user {
-    display: block;
+    display: flex;
     flex: none;
+    gap: 4px;
   }
   .nav--tours {
-    flex: none;
+    margin-left: 10px;
   }
   .nav__el,
   .nav__el:link,
@@ -1411,9 +1413,7 @@ body {
   .nav__el--cta {
     margin-left: 1.5rem;
   }
-  .nav {
-    display: block;
-  }
+
   .btn,
   .btn:link,
   .btn:visited {
@@ -1433,5 +1433,31 @@ body {
   }
   .section-description {
     flex-direction: column;
+  }
+  .cta__img {
+    display: none;
+  }
+  .cta__img--logo {
+    display: none;
+  }
+  .cta {
+    padding: 24px;
+  }
+  .cta__content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .heading-secondary {
+    font-size: 2rem;
+  }
+  .nav__el:not(:last-child) {
+    margin-bottom: 0;
+  }
+  .user__first--name {
+    display: none;
+  }
+  .nav__el--logout {
+    padding-right: 10px;
   }
 }
