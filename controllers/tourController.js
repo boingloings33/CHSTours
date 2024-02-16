@@ -33,10 +33,11 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
   // 1) Cover image
   req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await Jimp.read(req.files.imageCover[0].buffer)
+  await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
-    .quality(90)
-    .write(`public/img/tours/${filename}.jpg`);
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
 
   // 2) Images
   req.body.images = [];
@@ -45,10 +46,11 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
     req.files.images.map(async (file, i) => {
       const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
-      await Jimp.read(file.buffer)
+      await sharp(file.buffer)
         .resize(2000, 1333)
-        .quality(90)
-        .write(`public/img/tours/${filename}.jpg`);
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${filename}`);
 
       req.body.images.push(filename);
     }),

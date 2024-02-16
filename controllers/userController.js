@@ -1,5 +1,6 @@
 const multer = require('multer');
 const Jimp = require('jimp');
+const sharp = require('sharp');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -24,12 +25,15 @@ exports.uploadUserPhoto = upload.single('photo');
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-  await Jimp.read(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500)
-    .quality(90)
-    .write(`public/img/users/${req.file.filename}.jpg`);
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
   next();
 });
+
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
