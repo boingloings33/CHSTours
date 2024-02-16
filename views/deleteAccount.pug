@@ -1,0 +1,17 @@
+extends base
+
+block content
+  main.main
+    .delete-account-form
+      h2.heading-secondary.ma-bt-lg Delete Your Account
+      form.form
+        .form__group
+          label.form__label(for='text') Please type "DELETE" to confirm
+          input#delete-account-input.form__input(
+            type='text',
+            placeholder='Type here...',
+            required,
+            autocomplete='off'
+          )
+        .form__group
+          button(type='submit').btn.btn--green Delete Account

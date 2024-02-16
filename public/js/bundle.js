@@ -2686,6 +2686,31 @@
 
   // public/js/index.js
   var import_forgotPassword = __toESM(require_forgotPassword());
+
+  // public/js/deleteAccount.js
+  init_axios2();
+  init_alert();
+  var deleteAccount = async (input) => {
+    if (input === "DELETE") {
+      try {
+        await axios_default({
+          method: "DELETE",
+          url: "/api/v1/users/deleteMe"
+        });
+        showAlert("success", "Account Succesfully Deleted");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 1500);
+      } catch (err) {
+        showAlert("error", err.response.data.message);
+      }
+    }
+    if (input !== "DELETE") {
+      showAlert("error", 'Please make sure "DELETE" is spelled correctly!');
+    }
+  };
+
+  // public/js/index.js
   var mapBox = document.getElementById("map");
   var loginForm = document.querySelector(".login-form");
   var signupForm = document.querySelector(".signup-form");
@@ -2694,6 +2719,7 @@
   var userPasswordForm = document.querySelector(".form-user-settings");
   var passwordResetForm = document.querySelector(".password-reset-form");
   var forgotPasswordForm = document.querySelector(".forgot-password-form");
+  var deleteAccountForm = document.querySelector(".delete-account-form");
   var filetag = document.querySelector("#photo");
   var preview = document.querySelector(".form__user-photo");
   var readURL = (input) => {
@@ -2776,6 +2802,14 @@
       const password = document.getElementById("password").value;
       const passwordConfirm = document.getElementById("password-confirm").value;
       await passwordReset(token, password, passwordConfirm);
+    });
+  }
+  if (deleteAccountForm) {
+    deleteAccountForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("delete-account-input").value;
+      await deleteAccount(input);
+      document.getElementById("delete-account-input").value = "";
     });
   }
 })();

@@ -4,6 +4,7 @@ import { signup } from './signup';
 import { updateSettings } from './updateSettings';
 import { passwordReset } from './passwordReset';
 import { forgotPassword } from './forgotPassword';
+import { deleteAccount } from './deleteAccount';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -14,6 +15,7 @@ const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
 const passwordResetForm = document.querySelector('.password-reset-form');
 const forgotPasswordForm = document.querySelector('.forgot-password-form');
+const deleteAccountForm = document.querySelector('.delete-account-form');
 const filetag = document.querySelector('#photo');
 const preview = document.querySelector('.form__user-photo');
 
@@ -110,5 +112,15 @@ if (passwordResetForm) {
     const passwordConfirm = document.getElementById('password-confirm').value;
 
     await passwordReset(token, password, passwordConfirm);
+  });
+}
+
+if (deleteAccountForm) {
+  deleteAccountForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('delete-account-input').value;
+
+    await deleteAccount(input);
+    document.getElementById('delete-account-input').value = '';
   });
 }

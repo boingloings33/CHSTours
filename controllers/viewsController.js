@@ -68,3 +68,8 @@ exports.getForgotPassword = catchAsync(async (req, res, next) => {
     title: 'Forgot Password',
   });
 });
+exports.getDeleteAccount = catchAsync(async (req, res, next) => {
+  res.status(200).render('deleteAccount', {
+    title: 'Delete Account',
+  });
+});

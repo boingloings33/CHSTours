@@ -9,6 +9,7 @@ const {
   getSignUp,
   getResetPassword,
   getForgotPassword,
+  getDeleteAccount,
 } = require('../controllers/viewsController');
 
 const { isLoggedIn, protect } = require('../controllers/authController');
@@ -20,5 +21,6 @@ router.get('/signup', getSignUp);
 router.get('/me', protect, getAccount);
 router.get('/resetPassword/:resetToken', getResetPassword);
 router.get('/forgotPassword', getForgotPassword);
+router.get('/deleteAccount', protect, getDeleteAccount);
 
 module.exports = router;
