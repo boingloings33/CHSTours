@@ -73,3 +73,14 @@ exports.getDeleteAccount = catchAsync(async (req, res, next) => {
     title: 'Delete Account',
   });
 });
+exports.getAddReview = catchAsync(async (req, res, next) => {
+  const tour = await Tour.findOne({ slug: req.params.slug });
+  // console.log(tour._id.toString());
+  if (!tour) {
+    return next(new AppError('There is no tour with that name!', 404));
+  }
+  res.status(200).render('addReview', {
+    title: 'Add Review',
+    tour,
+  });
+});

@@ -5,8 +5,8 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __esm = (fn, res) => function __init() {
-    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  var __esm = (fn, res2) => function __init() {
+    return fn && (res2 = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res2;
   };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
@@ -2532,14 +2532,14 @@
       init_alert();
       exports.forgotPassword = async (email) => {
         try {
-          const res = await axios_default({
+          const res2 = await axios_default({
             method: "POST",
             url: "/api/v1/users/forgotPassword",
             data: {
               email
             }
           });
-          if (res.data.status === "success") {
+          if (res2.data.status === "success") {
             showAlert("success", "Email Sent!");
             window.setTimeout(() => {
               location.assign("/");
@@ -2578,7 +2578,7 @@
   init_alert();
   var login = async (email, password) => {
     try {
-      const res = await axios_default({
+      const res2 = await axios_default({
         method: "POST",
         url: "/api/v1/users/login",
         data: {
@@ -2586,7 +2586,7 @@
           password
         }
       });
-      if (res.data.status === "success") {
+      if (res2.data.status === "success") {
         showAlert("success", "Logged in successfully!");
         window.setTimeout(() => {
           location.assign("/");
@@ -2598,11 +2598,11 @@
   };
   var logout = async () => {
     try {
-      const res = await axios_default({
+      const res2 = await axios_default({
         method: "GET",
         url: "/api/v1/users/logout"
       });
-      if (res.data.status === "success") {
+      if (res2.data.status === "success") {
         location.assign("/");
       }
     } catch (err) {
@@ -2615,7 +2615,7 @@
   init_alert();
   var signup = async (email, password, passwordConfirm, name) => {
     try {
-      const res = await axios_default({
+      const res2 = await axios_default({
         method: "POST",
         url: "/api/v1/users/signup",
         data: {
@@ -2625,7 +2625,7 @@
           name
         }
       });
-      if (res.data.status === "success") {
+      if (res2.data.status === "success") {
         showAlert("success", "Logged in successfully!");
         window.setTimeout(() => {
           location.assign("/");
@@ -2641,12 +2641,12 @@
   init_alert();
   var updateSettings = async (data, type) => {
     try {
-      const res = await axios_default({
+      const res2 = await axios_default({
         method: "PATCH",
         url: type === "data" ? "/api/v1/users/updateMe" : "/api/v1/users/updateMyPassword",
         data
       });
-      if (res.data.status === "success") {
+      if (res2.data.status === "success") {
         showAlert(
           "success",
           type === "data" ? "Settings succesfully changed!" : "Password succesfully changed!"
@@ -2665,7 +2665,7 @@
   init_alert();
   var passwordReset = async (resetToken, password, passwordConfirm) => {
     try {
-      const res = await axios_default({
+      const res2 = await axios_default({
         method: "PATCH",
         url: `/api/v1/users/resetPassword/${resetToken}`,
         data: {
@@ -2673,7 +2673,7 @@
           passwordConfirm
         }
       });
-      if (res.data.status === "success") {
+      if (res2.data.status === "success") {
         showAlert("success", "Password Changed Succesfully!");
         window.setTimeout(() => {
           location.assign("/");
@@ -2710,6 +2710,34 @@
     }
   };
 
+  // public/js/addReview..js
+  init_axios2();
+  init_alert();
+  var addReview = async (review, rating, tour, user) => {
+    try {
+      const res2 = await axios_default({
+        method: "POST",
+        url: "/api/v1/reviews",
+        data: {
+          review,
+          rating,
+          tour,
+          user
+        }
+      });
+      if (res2.data.status === "success") {
+        showAlert("success", "Review successfully created!");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 1500);
+      }
+    } catch (err) {
+      console.log(err);
+      console.log(res);
+      showAlert("error", err.response.data.message);
+    }
+  };
+
   // public/js/index.js
   var mapBox = document.getElementById("map");
   var loginForm = document.querySelector(".login-form");
@@ -2720,8 +2748,10 @@
   var passwordResetForm = document.querySelector(".password-reset-form");
   var forgotPasswordForm = document.querySelector(".forgot-password-form");
   var deleteAccountForm = document.querySelector(".delete-account-form");
+  var reviewForm = document.querySelector(".review-form");
   var filetag = document.querySelector("#photo");
   var preview = document.querySelector(".form__user-photo");
+  var stars = document.querySelectorAll(".reviews__star");
   var readURL = (input) => {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
@@ -2810,6 +2840,24 @@
       const input = document.getElementById("delete-account-input").value;
       await deleteAccount(input);
       document.getElementById("delete-account-input").value = "";
+    });
+  }
+  if (reviewForm) {
+    let rating;
+    stars.forEach((item, i) => {
+      item.addEventListener("click", () => {
+        stars.forEach((star, i2) => {
+          rating = i + 1;
+          i >= i2 ? star.classList.add("reviews__star--active") : star.classList.remove("reviews__star--active");
+        });
+      });
+    });
+    reviewForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const review = document.querySelector(".review-text-area").value;
+      const userId = document.querySelector(".userId").dataset.token;
+      const tourId = document.querySelector(".tourId").dataset.token;
+      await addReview(review, rating, tourId, userId);
     });
   }
 })();

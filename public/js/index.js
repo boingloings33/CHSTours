@@ -5,6 +5,7 @@ import { updateSettings } from './updateSettings';
 import { passwordReset } from './passwordReset';
 import { forgotPassword } from './forgotPassword';
 import { deleteAccount } from './deleteAccount';
+import { addReview } from './addReview.';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -16,8 +17,10 @@ const userPasswordForm = document.querySelector('.form-user-settings');
 const passwordResetForm = document.querySelector('.password-reset-form');
 const forgotPasswordForm = document.querySelector('.forgot-password-form');
 const deleteAccountForm = document.querySelector('.delete-account-form');
+const reviewForm = document.querySelector('.review-form');
 const filetag = document.querySelector('#photo');
 const preview = document.querySelector('.form__user-photo');
+const stars = document.querySelectorAll('.reviews__star');
 
 const readURL = (input) => {
   if (input.files && input.files[0]) {
@@ -122,5 +125,28 @@ if (deleteAccountForm) {
 
     await deleteAccount(input);
     document.getElementById('delete-account-input').value = '';
+  });
+}
+
+if (reviewForm) {
+  let rating;
+  stars.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      stars.forEach((star, i2) => {
+        rating = i + 1;
+        i >= i2
+          ? star.classList.add('reviews__star--active')
+          : star.classList.remove('reviews__star--active');
+      });
+    });
+  });
+
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const review = document.querySelector('.review-text-area').value;
+    const userId = document.querySelector('.userId').dataset.token;
+    const tourId = document.querySelector('.tourId').dataset.token;
+
+    await addReview(review, rating, tourId, userId);
   });
 }

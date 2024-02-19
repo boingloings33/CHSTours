@@ -1,0 +1,36 @@
+extends base
+block content
+  main.main
+    .review-form
+      h2.heading-secondary.ma-bt-lg Leave a review!
+        form.form
+          .form__group
+            h2.tour__review #{tour.name} 
+            .star
+                a(href="#")
+                  svg.reviews__star
+                    use(xlink:href='/img/icons.svg#icon-star')
+                a(href="#")
+                  svg.reviews__star
+                    use(xlink:href='/img/icons.svg#icon-star')
+                a(href="#")
+                  svg.reviews__star
+                    use(xlink:href='/img/icons.svg#icon-star')
+                a(href="#")
+                  svg.reviews__star
+                    use(xlink:href='/img/icons.svg#icon-star')
+                a(href="#")
+                  svg.reviews__star
+                    use(xlink:href='/img/icons.svg#icon-star')
+            .form__group        
+              label(for='review') Tell us your experience
+            .form__group  
+              textarea.review-text-area.form__input(name="review", cols="30", rows="10") 
+
+            button.btn.btn--green(type='submit') Submit
+            .tourId(data-token=`${tour._id ? tour._id : ''}`)
+            .userId(data-token=`${user.id ? user.id : ''}`)
+          
+          //- .review-cover-img-overlay
+          //-   img.review-cover-img(src=`/img/tours/${tour.imageCover}`, alt="")
+

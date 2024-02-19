@@ -298,6 +298,10 @@ body {
   outline-offset: 3px;
 }
 
+.btn--review:active {
+  background-color: rgb(233, 233, 233);
+}
+
 .login-btn-group {
   display: flex;
   justify-content: space-between;
@@ -528,6 +532,26 @@ body {
   z-index: 1000;
 }
 
+.review-cover-img {
+  -o-object-fit: cover;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  position: relative;
+}
+
+.review-cover-img-overlay {
+  z-index: 2;
+  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  height: 100%;
+  position: absolute;
+}
+
+.rating.card__icon {
+  fill: rgb(163, 163, 163);
+}
+
 .picture-box__img {
   display: block;
   width: 100%;
@@ -580,6 +604,9 @@ body {
 }
 
 .section-reviews {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: calc(0px - var(--section-rotate));
   padding: calc(5rem + var(--section-rotate)) 0;
   position: relative;
@@ -604,6 +631,7 @@ body {
     100% calc(100% - var(--section-rotate)),
     0 100%
   );
+  overflow: hidden;
 }
 
 .reviews {
@@ -615,6 +643,7 @@ body {
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
   overflow: hidden;
+  align-self: flex-start;
 }
 .reviews__card {
   width: 30rem;
@@ -675,12 +704,19 @@ body {
   height: 2rem;
   width: 2rem;
   margin-right: 1px;
+  fill: #bbb;
 }
 .reviews__star--active {
   fill: #55c57a;
 }
 .reviews__star--inactive {
   fill: #bbb;
+}
+
+.tour__review {
+  color: #777;
+  font-size: 2rem;
+  text-transform: none;
 }
 
 .section-cta {
@@ -1198,6 +1234,13 @@ body {
   align-self: center;
 }
 
+.leave-rating {
+  background-color: red;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .error {
   position: absolute;
   top: 35%;
@@ -1278,6 +1321,19 @@ body {
   padding: 5rem 7rem;
   border-radius: 5px;
 }
+.review-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 55rem;
+  background-color: #fff;
+  -webkit-box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
+  padding: 5rem 7rem;
+  border-radius: 5px;
+}
 
 .delete-account-form .btn--green {
   background-image: linear-gradient(
@@ -1314,6 +1370,9 @@ body {
   box-sizing: border-box;
   /* Pseudo element (a visible thing that isn't really in the DOM).
       Also needs -ms- */
+}
+.review-text-area {
+  color: #777;
 }
 .form__input:focus {
   outline: none;

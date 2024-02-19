@@ -104,8 +104,10 @@ block content
   if (tour.reviews.length > 0)
     section.section-reviews
       .reviews
-        each review in tour.reviews 
+        each review in tour.reviews.reverse()
           +reviewCard(review)
+      if user && user.role !== 'admin'
+        a.btn.btn--white.btn--review(href=`/tour/${tour.slug}/review`) Leave a Review!    
 
   section.section-cta
     .cta
